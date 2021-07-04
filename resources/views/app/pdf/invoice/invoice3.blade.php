@@ -6,6 +6,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <style type="text/css">
+        {
+            font-family: DejaVu Sans, sans-serif;
+            direction: rtl;
+        }
         /* -- Base -- */
 
         body {
