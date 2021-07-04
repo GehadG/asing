@@ -9,7 +9,8 @@
         /* -- Base -- */
 
         body {
-            font-family: "DejaVu Sans";
+            font-family: DejaVu Sans, sans-serif;
+            direction: rtl;
         }
 
         html {

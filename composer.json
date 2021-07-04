@@ -10,7 +10,7 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "aws/aws-sdk-php": "^3.142",
-        "barryvdh/laravel-dompdf": "^0.9.0",
+        "barryvdh/laravel-dompdf": "dev-choker",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
         "fruitcake/laravel-cors": "^1.0",
@@ -25,7 +25,8 @@
         "spatie/flysystem-dropbox": "^1.2",
         "spatie/laravel-backup": "^6.11",
         "spatie/laravel-medialibrary": "^8.7",
-        "vinkla/hashids": "^9.0"
+        "vinkla/hashids": "^9.0",
+        "khaled.alshamaa/ar-php": "^6.0"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.6",
@@ -41,7 +42,18 @@
         "pestphp/pest-plugin-laravel": "^0.3.0",
         "phpunit/phpunit": "^9.0"
     },
-    "autoload": {
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/mohamadchoker/laravel-dompdf",
+      "no-api": true
+    }
+  ],
+  "autoload": {
         "psr-4": {
             "Crater\\": "app/",
             "Database\\Factories\\": "database/factories/",
