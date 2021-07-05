@@ -49,7 +49,7 @@
             type="submit"
             size="lg"
           >
-            <save-icon v-if="!isLoading" class="mr-2 -ml-1" />
+            <save-icon v-if="!isLoading" class="mr-2 -ml-1"/>
             {{ $t('invoices.save_invoice') }}
           </sw-button>
         </template>
@@ -108,7 +108,7 @@
               class="mt-2"
               @input="$v.invoiceNumAttribute.$touch()"
             >
-              <hashtag-icon slot="leftIcon" class="h-4 ml-1 text-gray-500" />
+              <hashtag-icon slot="leftIcon" class="h-4 ml-1 text-gray-500"/>
             </sw-input>
           </sw-input-group>
 
@@ -123,54 +123,74 @@
               class="mt-2"
               @input="$v.newInvoice.reference_number.$touch()"
             >
-              <hashtag-icon slot="leftIcon" class="h-4 ml-1 text-gray-500" />
+              <hashtag-icon slot="leftIcon" class="h-4 ml-1 text-gray-500"/>
             </sw-input>
           </sw-input-group>
         </div>
-      </div>
 
+      </div>
+      <div
+        v-if="customFields.length > 0"
+        class="grid gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 grid-col-1 md:grid-cols-2"
+      >
+        <sw-input-group
+          v-for="(field, index) in customFields"
+          :label="field.label"
+          :required="field.is_required ? true : false"
+          :key="index"
+        >
+          <component
+            :type="field.type.label"
+            :field="field"
+            :is-edit="isEdit"
+            :is="field.type + 'Field'"
+            :invalid-fields="invalidFields"
+            @update="setCustomFieldValue"
+          />
+        </sw-input-group>
+      </div>
       <!-- Items -->
       <table class="w-full text-center item-table">
         <colgroup>
-          <col style="width: 40%" />
-          <col style="width: 10%" />
-          <col style="width: 15%" />
-          <col v-if="discountPerItem === 'YES'" style="width: 15%" />
-          <col style="width: 15%" />
+          <col style="width: 40%"/>
+          <col style="width: 10%"/>
+          <col style="width: 15%"/>
+          <col v-if="discountPerItem === 'YES'" style="width: 15%"/>
+          <col style="width: 15%"/>
         </colgroup>
         <thead class="bg-white border border-gray-200 border-solid">
-          <tr>
-            <th
-              class="px-5 py-3 text-sm not-italic font-medium leading-5 text-left text-gray-700 border-t border-b border-gray-200 border-solid"
-            >
+        <tr>
+          <th
+            class="px-5 py-3 text-sm not-italic font-medium leading-5 text-left text-gray-700 border-t border-b border-gray-200 border-solid"
+          >
               <span class="pl-12">
                 {{ $tc('items.item', 2) }}
               </span>
-            </th>
-            <th
-              class="px-5 py-3 text-sm not-italic font-medium leading-5 text-right text-gray-700 border-t border-b border-gray-200 border-solid"
-            >
-              {{ $t('invoices.item.quantity') }}
-            </th>
-            <th
-              class="px-5 py-3 text-sm not-italic font-medium leading-5 text-left text-gray-700 border-t border-b border-gray-200 border-solid"
-            >
-              {{ $t('invoices.item.price') }}
-            </th>
-            <th
-              v-if="discountPerItem === 'YES'"
-              class="px-5 py-3 text-sm not-italic font-medium leading-5 text-left text-gray-700 border-t border-b border-gray-200 border-solid"
-            >
-              {{ $t('invoices.item.discount') }}
-            </th>
-            <th
-              class="px-5 py-3 text-sm not-italic font-medium leading-5 text-right text-gray-700 border-t border-b border-gray-200 border-solid"
-            >
+          </th>
+          <th
+            class="px-5 py-3 text-sm not-italic font-medium leading-5 text-right text-gray-700 border-t border-b border-gray-200 border-solid"
+          >
+            {{ $t('invoices.item.quantity') }}
+          </th>
+          <th
+            class="px-5 py-3 text-sm not-italic font-medium leading-5 text-left text-gray-700 border-t border-b border-gray-200 border-solid"
+          >
+            {{ $t('invoices.item.price') }}
+          </th>
+          <th
+            v-if="discountPerItem === 'YES'"
+            class="px-5 py-3 text-sm not-italic font-medium leading-5 text-left text-gray-700 border-t border-b border-gray-200 border-solid"
+          >
+            {{ $t('invoices.item.discount') }}
+          </th>
+          <th
+            class="px-5 py-3 text-sm not-italic font-medium leading-5 text-right text-gray-700 border-t border-b border-gray-200 border-solid"
+          >
               <span class="pr-10">
                 {{ $t('invoices.item.amount') }}
               </span>
-            </th>
-          </tr>
+          </th>
+        </tr>
         </thead>
 
         <draggable
@@ -199,7 +219,7 @@
         class="flex items-center justify-center w-full px-6 py-3 text-base border-b border-gray-200 border-solid cursor-pointer text-primary-400 hover:bg-gray-200"
         @click="addItem"
       >
-        <shopping-cart-icon class="h-5 mr-2" />
+        <shopping-cart-icon class="h-5 mr-2"/>
         {{ $t('invoices.add_item') }}
       </div>
 
@@ -216,33 +236,12 @@
               <div slot="activator" class="float-right mt-1">
                 + {{ $t('general.insert_note') }}
               </div>
-              <note-select-popup type="Invoice" @select="onSelectNote" />
+              <note-select-popup type="Invoice" @select="onSelectNote"/>
             </sw-popup>
             <sw-input-group :label="$t('invoices.notes')">
               <base-custom-input
                 v-model="newInvoice.notes"
                 :fields="InvoiceFields"
-              />
-            </sw-input-group>
-          </div>
-
-          <div
-            v-if="customFields.length > 0"
-            class="grid gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 grid-col-1 md:grid-cols-2"
-          >
-            <sw-input-group
-              v-for="(field, index) in customFields"
-              :label="field.label"
-              :required="field.is_required ? true : false"
-              :key="index"
-            >
-              <component
-                :type="field.type.label"
-                :field="field"
-                :is-edit="isEdit"
-                :is="field.type + 'Field'"
-                :invalid-fields="invalidFields"
-                @update="setCustomFieldValue"
               />
             </sw-input-group>
           </div>
@@ -260,7 +259,7 @@
             >
               <span class="flex text-black">
                 {{ getTemplateName }}
-                <pencil-icon class="h-5 ml-2 -mr-1" />
+                <pencil-icon class="h-5 ml-2 -mr-1"/>
               </span>
             </sw-button>
           </sw-input-group>
@@ -272,12 +271,12 @@
           <div class="flex items-center justify-between w-full">
             <label
               class="text-sm font-semibold leading-5 text-gray-500 uppercase"
-              >{{ $t('invoices.sub_total') }}</label
+            >{{ $t('invoices.sub_total') }}</label
             >
             <label
               class="flex items-center justify-center m-0 text-lg text-black uppercase"
             >
-              <div v-html="$utils.formatMoney(subtotal, currency)" />
+              <div v-html="$utils.formatMoney(subtotal, currency)"/>
             </label>
           </div>
           <div
@@ -287,13 +286,13 @@
           >
             <label
               class="m-0 text-sm font-semibold leading-5 text-gray-500 uppercase"
-              >{{ tax.name }} - {{ tax.percent }}%
+            >{{ tax.name }} - {{ tax.percent }}%
             </label>
             <label
               class="flex items-center justify-center m-0 text-lg text-black uppercase"
               style="font-size: 18px"
             >
-              <div v-html="$utils.formatMoney(tax.amount, currency)" />
+              <div v-html="$utils.formatMoney(tax.amount, currency)"/>
             </label>
           </div>
           <div
@@ -302,7 +301,7 @@
           >
             <label
               class="text-sm font-semibold leading-5 text-gray-500 uppercase"
-              >{{ $t('invoices.discount') }}</label
+            >{{ $t('invoices.discount') }}</label
             >
             <div class="flex" style="width: 105px" role="group">
               <sw-input
@@ -328,7 +327,7 @@
                         ? currency.symbol
                         : '%'
                     }}
-                    <chevron-down-icon class="h-5" />
+                    <chevron-down-icon class="h-5"/>
                   </span>
                 </sw-button>
 
@@ -366,7 +365,7 @@
             <div slot="activator" class="float-right pt-2 pb-5">
               + {{ $t('invoices.add_tax') }}
             </div>
-            <tax-select-popup :taxes="newInvoice.taxes" @select="onSelectTax" />
+            <tax-select-popup :taxes="newInvoice.taxes" @select="onSelectTax"/>
           </sw-popup>
 
           <div
@@ -380,13 +379,13 @@
             <label
               class="flex items-center justify-center text-lg uppercase text-primary-400"
             >
-              <div v-html="$utils.formatMoney(total, currency)" />
+              <div v-html="$utils.formatMoney(total, currency)"/>
             </label>
           </div>
         </div>
       </div>
     </form>
-    <base-loader v-else />
+    <base-loader v-else/>
   </base-page>
 </template>
 
@@ -395,20 +394,15 @@ import draggable from 'vuedraggable'
 import InvoiceItem from './Item'
 import CustomerSelect from './CustomerSelect'
 import InvoiceStub from '../../stub/invoice'
-import { mapActions, mapGetters } from 'vuex'
+import invoice from '../../stub/invoice'
+import {mapActions, mapGetters} from 'vuex'
 import moment from 'moment'
 import Guid from 'guid'
 import TaxStub from '../../stub/tax'
 import Tax from './InvoiceTax'
-import { PlusSmIcon } from '@vue-hero-icons/outline'
-import {
-  ChevronDownIcon,
-  PencilIcon,
-  ShoppingCartIcon,
-  HashtagIcon,
-} from '@vue-hero-icons/solid'
+import {PlusSmIcon} from '@vue-hero-icons/outline'
+import {ChevronDownIcon, HashtagIcon, PencilIcon, ShoppingCartIcon,} from '@vue-hero-icons/solid'
 import CustomFieldsMixin from '../../mixins/customFields'
-import invoice from '../../stub/invoice'
 
 const {
   required,
@@ -451,7 +445,7 @@ export default {
           {
             ...InvoiceStub,
             id: Guid.raw(),
-            taxes: [{ ...TaxStub, id: Guid.raw() }],
+            taxes: [{...TaxStub, id: Guid.raw()}],
           },
         ],
         taxes: [],
@@ -746,7 +740,7 @@ export default {
     },
 
     updateTax(data) {
-      Object.assign(this.newInvoice.taxes[data.index], { ...data.item })
+      Object.assign(this.newInvoice.taxes[data.index], {...data.item})
     },
 
     async fetchInitialData() {
@@ -809,13 +803,13 @@ export default {
             type: 'Invoice',
             limit: 'all',
           }),
-          this.fetchTaxTypes({ limit: 'all' }),
+          this.fetchTaxTypes({limit: 'all'}),
         ])
           .then(async ([res1, res2]) => {
             if (res1.data) {
               this.customerId = res1.data.invoice.user_id
               this.newInvoice = res1.data.invoice
-              this.formData = { ...this.formData, ...res1.data.invoice }
+              this.formData = {...this.formData, ...res1.data.invoice}
 
               this.newInvoice.invoice_date = moment(
                 res1.data.invoice.invoice_date,
@@ -850,7 +844,7 @@ export default {
 
       this.isLoadingInvoice = true
       await this.setInitialCustomFields('Invoice')
-      await this.fetchTaxTypes({ limit: 'all' })
+      await this.fetchTaxTypes({limit: 'all'})
       this.selectedCurrency = this.defaultCurrency
       this.newInvoice.invoice_date = moment().toString()
       this.newInvoice.due_date = moment().add(7, 'days').toString()
@@ -870,7 +864,7 @@ export default {
       this.newInvoice.items.push({
         ...InvoiceStub,
         id: Guid.raw(),
-        taxes: [{ ...TaxStub, id: Guid.raw() }],
+        taxes: [{...TaxStub, id: Guid.raw()}],
       })
     },
 
@@ -879,7 +873,7 @@ export default {
     },
 
     updateItem(data) {
-      Object.assign(this.newInvoice.items[data.index], { ...data.item })
+      Object.assign(this.newInvoice.items[data.index], {...data.item})
     },
 
     async submitForm() {
@@ -969,7 +963,7 @@ export default {
         amount = Math.round(
           ((this.subtotalWithDiscount + this.totalSimpleTax) *
             selectedTax.percent) /
-            100
+          100
         )
       } else if (this.subtotalWithDiscount && selectedTax.percent) {
         amount = Math.round(
@@ -1033,6 +1027,7 @@ export default {
       min-width: 390px;
     }
   }
+
   @media (max-width: 480px) {
     .invoice-foot {
       .invoice-total {

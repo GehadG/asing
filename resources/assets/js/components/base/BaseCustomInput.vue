@@ -209,7 +209,6 @@ export default {
               { label: 'Number', value: 'INVOICE_NUMBER' },
               { label: 'Ref Number', value: 'INVOICE_REF_NUMBER' },
               { label: 'Invoice Link', value: 'INVOICE_LINK' },
-              { label: 'Policy', value: 'POLICY' },
               ...this.invoiceFields.map((i) => ({
                 label: i.label,
                 value: i.slug,
