@@ -129,26 +129,29 @@
         </div>
 
       </div>
-      <div
-        v-if="customFields.length > 0"
-        class="grid gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 grid-col-1 md:grid-cols-2"
-      >
-        <sw-input-group
-          v-for="(field, index) in customFields"
-          :label="field.label"
-          :required="field.is_required ? true : false"
-          :key="index"
+      <div class="grid-cols-12 gap-8 mt-6 mb-8 lg:grid" >
+        <div
+          v-if="customFields.length > 0"
+          class="grid gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 grid-col-1 md:grid-cols-2"
         >
-          <component
-            :type="field.type.label"
-            :field="field"
-            :is-edit="isEdit"
-            :is="field.type + 'Field'"
-            :invalid-fields="invalidFields"
-            @update="setCustomFieldValue"
-          />
-        </sw-input-group>
+          <sw-input-group
+            v-for="(field, index) in customFields"
+            :label="field.label"
+            :required="field.is_required ? true : false"
+            :key="index"
+          >
+            <component
+              :type="field.type.label"
+              :field="field"
+              :is-edit="isEdit"
+              :is="field.type + 'Field'"
+              :invalid-fields="invalidFields"
+              @update="setCustomFieldValue"
+            />
+          </sw-input-group>
+        </div>
       </div>
+
       <!-- Items -->
       <table class="w-full text-center item-table">
         <colgroup>
