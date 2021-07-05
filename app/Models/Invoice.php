@@ -508,6 +508,7 @@ class Invoice extends Model implements HasMedia
         $invoiceTemplate = self::find($this->id)->template_name;
 
         $company = Company::find($this->company_id);
+        $customer = User::find($this->user_id);
         $locale = CompanySetting::getSetting('language', $company->id);
 
         App::setLocale($locale);
@@ -523,6 +524,7 @@ class Invoice extends Model implements HasMedia
             'logo' => $logo ?? null,
             'labels' => $labels,
             'taxes' => $taxes,
+            'customer'=>$customer
         ]);
 
         return PDF::loadView('app.pdf.invoice.'.$invoiceTemplate);
@@ -552,6 +554,7 @@ class Invoice extends Model implements HasMedia
 
         return $this->getFormattedString($format);
     }
+
 
     public function getCustomerBillingAddress()
     {

@@ -357,6 +357,11 @@
                         <td class="attribute-value"> &nbsp;{{$invoice->invoice_number}}</td>
                     </tr>
                     <tr>
+
+                        <td class="attribute-value"> &nbsp;{{$customer->name}}</td>
+                        <td class="attribute-label">السادة</td>
+                    </tr>
+                    <tr>
                         <td class="attribute-label">@lang('pdf_invoice_date')</td>
                         <td class="attribute-value"> &nbsp;{{$invoice->formattedInvoiceDate}}</td>
                     </tr>
