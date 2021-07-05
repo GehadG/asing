@@ -321,11 +321,9 @@
                     @endif
                 </td>
                 <td width="50%" style="text-align: center; vertical-align: middle;" class="text-center company-address-container company-address">
-                    <h3>اير اند سي انترناشيونال</h3>
-                    <br>
-                    <h6>س.ت:  ب.ض: 6020 74953</h6>
-                    <br>
-                    <h6>ق.م.: 435863614</h6>
+                    <h1>اير اند سي انترناشيونال</h1>
+                    <h3>س.ت:  ب.ض: 6020 74953</h3>
+                    <h3>ق.م.: 435863614</h3>
                 </td>
             </tr>
         </table>
