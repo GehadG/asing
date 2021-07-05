@@ -254,7 +254,7 @@ class CurrenciesTableSeeder extends Seeder
             [
                 'name' => 'Egyptian Pound',
                 'code' => 'EGP',
-                'symbol' => 'E£',
+                'symbol' => 'ج.م.',
                 'precision' => '2',
                 'thousand_separator' => ',',
                 'decimal_separator' => '.',

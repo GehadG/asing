@@ -6,9 +6,17 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
         /* -- Base -- */
-        body {
-            font-family: "DejaVu Sans";
+        {
+            font-family: DejaVu Sans, sans-serif;
+            direction: rtl;
         }
+        /* -- Base -- */
+
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            direction: rtl;
+        }
+
 
         html {
             margin: 0px;

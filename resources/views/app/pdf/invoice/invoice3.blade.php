@@ -320,8 +320,12 @@
                     <h1 class="header-logo"> {{$invoice->user->company->name}} </h1>
                     @endif
                 </td>
-                <td width="50%" class="text-right company-address-container company-address">
-                    {!! $company_address !!}
+                <td width="50%" style="text-align: center; vertical-align: middle;" class="text-center company-address-container company-address">
+                    <h3>اير اند سي انترناشيونال</h3>
+                    <br>
+                    <h6>س.ت:  ب.ض: 6020 74953</h6>
+                    <br>
+                    <h6>ق.م.: 435863614</h6>
                 </td>
             </tr>
         </table>
