@@ -1,4 +1,4 @@
-<table width="100%" class="items-table" cellspacing="0" border="0">
+<table dir="rtl" width="100%" class="items-table" cellspacing="0" border="0">
     <tr class="item-table-heading-row">
         <th width="2%" class="pr-20 text-right item-table-heading">#</th>
         <th width="40%" class="pl-0 text-left item-table-heading">@lang('pdf_items_label')</th>
