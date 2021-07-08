@@ -173,6 +173,7 @@
           <th
             class="px-5 py-3 text-sm not-italic font-medium leading-5 text-right text-gray-700 border-t border-b border-gray-200 border-solid"
           >
+
             {{ $t('invoices.item.quantity') }}
           </th>
           <th

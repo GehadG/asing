@@ -571,6 +571,8 @@ class EnvironmentManager
                 file_get_contents($this->envPath)
             ));
         } catch (Exception $e) {
+            echo "IM HERE TEST ME";
+            echo $e->getTraceAsString();
             return [
                 'error' => 'domain_verification_failed'
             ];
