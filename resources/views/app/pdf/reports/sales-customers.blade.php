@@ -185,6 +185,7 @@
             @php
             $vatWith = $invoice->vat / 1.1;
             $vatOnly = $invoice->vat - $vatWith;
+            $curr= $invoice->user->currency;
             if($type==='1'){
             $datex = $invoice->formattedInvoiceDate;
             }else{
@@ -239,19 +240,19 @@
                 </td>
                 <td>
                     <p class="sales-information-text2">
-                        {!! format_money_pdf($totalInTotal, $invoice->user->currency) !!}
+                        {!! format_money_pdf($totalInTotal, $curr) !!}
 
                     </p>
                 </td>
                 <td>
                     <p class="sales-information-text2">
-                        {!! format_money_pdf($totalVat, $invoice->user->currency) !!}
+                        {!! format_money_pdf($totalVat, $curr) !!}
 
                     </p>
                 </td>
                 <td>
                     <p class="sales-information-text2">
-                        {!! format_money_pdf($totalFees, $invoice->user->currency) !!}
+                        {!! format_money_pdf($totalFees, $curr) !!}
                     </p>
                 </td>
                 <td>
