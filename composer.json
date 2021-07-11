@@ -26,17 +26,18 @@
     "fruitcake/laravel-cors": "^1.0",
     "guzzlehttp/guzzle": "^7.0.1",
     "intervention/image": "^2.3",
+    "khaled.alshamaa/ar-php": "^6.0",
     "laravel/framework": "^8.0",
     "laravel/helpers": "^1.1",
     "laravel/sanctum": "^2.6",
     "laravel/tinker": "^2.0",
     "laravel/ui": "^3.0",
     "league/flysystem-aws-s3-v3": "^1.0",
+    "phenx/php-font-lib": "^0.5.2",
     "spatie/flysystem-dropbox": "^1.2",
     "spatie/laravel-backup": "^6.11",
     "spatie/laravel-medialibrary": "^8.7",
-    "vinkla/hashids": "^9.0",
-    "khaled.alshamaa/ar-php": "^6.0"
+    "vinkla/hashids": "^9.0"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.6",

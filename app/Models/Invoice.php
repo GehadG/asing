@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Vinkla\Hashids\Facades\Hashids;
+use ArPHP\I18N\Arabic;
 
 class Invoice extends Model implements HasMedia
 {
@@ -58,6 +59,7 @@ class Invoice extends Model implements HasMedia
         'invoicePdfUrl',
     ];
 
+
     public function setInvoiceDateAttribute($value)
     {
         if ($value) {
@@ -75,7 +77,7 @@ class Invoice extends Model implements HasMedia
     public static function getNextInvoiceNumber($value)
     {
         // Get the last created order
-        $lastOrder = Invoice::where('invoice_number', 'LIKE', $value.'-%')
+        $lastOrder = Invoice::where('invoice_number', 'LIKE', $value . '-%')
             ->orderBy('invoice_number', 'desc')
             ->first();
 
@@ -83,7 +85,7 @@ class Invoice extends Model implements HasMedia
         $numberLength = CompanySetting::getSetting('invoice_number_length', request()->header('company'));
         $numberLengthText = "%0{$numberLength}d";
 
-        if (! $lastOrder) {
+        if (!$lastOrder) {
             // We get here if there is no order at all
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
@@ -143,7 +145,7 @@ class Invoice extends Model implements HasMedia
 
     public function getInvoicePdfUrlAttribute()
     {
-        return url('/invoices/pdf/'.$this->unique_hash);
+        return url('/invoices/pdf/' . $this->unique_hash);
     }
 
     public function getPreviousStatus()
@@ -229,7 +231,7 @@ class Invoice extends Model implements HasMedia
 
     public function scopeWhereInvoiceNumber($query, $invoiceNumber)
     {
-        return $query->where('invoices.invoice_number', 'LIKE', '%'.$invoiceNumber.'%');
+        return $query->where('invoices.invoice_number', 'LIKE', '%' . $invoiceNumber . '%');
     }
 
     public function scopeInvoicesBetween($query, $start, $end)
@@ -244,9 +246,9 @@ class Invoice extends Model implements HasMedia
     {
         foreach (explode(' ', $search) as $term) {
             $query->whereHas('user', function ($query) use ($term) {
-                $query->where('name', 'LIKE', '%'.$term.'%')
-                    ->orWhere('contact_name', 'LIKE', '%'.$term.'%')
-                    ->orWhere('company_name', 'LIKE', '%'.$term.'%');
+                $query->where('name', 'LIKE', '%' . $term . '%')
+                    ->orWhere('contact_name', 'LIKE', '%' . $term . '%')
+                    ->orWhere('company_name', 'LIKE', '%' . $term . '%');
             });
         }
     }
@@ -345,14 +347,16 @@ class Invoice extends Model implements HasMedia
         if ($request->has('invoiceSend')) {
             $data['status'] = Invoice::STATUS_SENT;
         }
-
+        $data['total']=$data['total']+$data['vat'];
+        $customer = User::find($request->user_id);
+        $data['customerName']=$customer->name;
         $invoice = Invoice::create($data);
         $invoice->unique_hash = Hashids::connection(Invoice::class)->encode($invoice->id);
         $invoice->save();
 
         self::createItems($invoice, $request);
 
-        if ($request->has('taxes') && (! empty($request->taxes))) {
+        if ($request->has('taxes') && (!empty($request->taxes))) {
             self::createTaxes($invoice, $request);
         }
 
@@ -361,10 +365,10 @@ class Invoice extends Model implements HasMedia
         }
 
         $invoice = Invoice::with([
-                'items',
-                'user',
-                'taxes'
-            ])
+            'items',
+            'user',
+            'taxes'
+        ])
             ->find($invoice->id);
 
         return $invoice;
@@ -376,13 +380,15 @@ class Invoice extends Model implements HasMedia
         $oldAmount = $this->total;
 
         if ($oldAmount != $request->total) {
-            $oldAmount = (int) round($request->total) - (int) $oldAmount;
+            $oldAmount = (int)round($request->total) - (int)$oldAmount;
         } else {
             $oldAmount = 0;
         }
 
         $data['due_amount'] = ($this->due_amount + $oldAmount);
-
+        $customer = User::find($request->user_id);
+        $data['customerName']=$customer->name;
+        $data['total']=$data['total']+$data['vat'];
         if ($data['due_amount'] == 0 && $this->paid_status != Invoice::STATUS_PAID) {
             $data['status'] = Invoice::STATUS_COMPLETED;
             $data['paid_status'] = Invoice::STATUS_PAID;
@@ -403,7 +409,7 @@ class Invoice extends Model implements HasMedia
 
         self::createItems($this, $request);
 
-        if ($request->has('taxes') && (! empty($request->taxes))) {
+        if ($request->has('taxes') && (!empty($request->taxes))) {
             self::createTaxes($this, $request);
         }
 
@@ -412,10 +418,10 @@ class Invoice extends Model implements HasMedia
         }
 
         $invoice = Invoice::with([
-                'items',
-                'user',
-                'taxes'
-            ])
+            'items',
+            'user',
+            'taxes'
+        ])
             ->find($this->id);
 
         return $invoice;
@@ -463,7 +469,7 @@ class Invoice extends Model implements HasMedia
 
     public static function createTaxes($invoice, $request)
     {
-        if ($request->has('taxes') && (! empty($request->taxes))) {
+        if ($request->has('taxes') && (!empty($request->taxes))) {
             foreach ($request->taxes as $tax) {
                 $tax['company_id'] = $request->header('company');
 
@@ -483,9 +489,9 @@ class Invoice extends Model implements HasMedia
         if ($this->tax_per_item === 'YES') {
             foreach ($this->items as $item) {
                 foreach ($item->taxes as $tax) {
-                    if (! in_array($tax->name, $taxTypes)) {
+                    if (!in_array($tax->name, $taxTypes)) {
                         array_push($taxTypes, $tax->name);
-                        array_push($labels, $tax->name.' ('.$tax->percent.'%)');
+                        array_push($labels, $tax->name . ' (' . $tax->percent . '%)');
                     }
                 }
             }
@@ -514,7 +520,23 @@ class Invoice extends Model implements HasMedia
         App::setLocale($locale);
 
         $logo = $company->logo_path;
+        $totalValue = $this->total;
+        $number = explode("-", $this->invoice_number);
+        $number = $number[1];
+        $Arabic = new Arabic();
+        $only = ' لاغير ';
+        $totalOnly =' الاجمالى فقط ';
+        $vatTot = $this->vat / 100;
+        $intpart = floor( $vatTot ) ;
+        $fraction = $vatTot - $intpart ;
+        $frac = round($fraction,2)*100;
+        $stringTotal = $Arabic->money2str($totalValue/100, 'EGP', 'ar');
+        $finalString = $stringTotal.$only.$totalOnly;
+        $vatWithout = $this->vat / 1.1;
+        $vatVat = $this->vat - $vatWithout;
 
+        $vatString =$Arabic->money2str($vatTot, 'EGP', 'ar');
+        $vatFinalString = $vatString.$only.$totalOnly;
         view()->share([
             'invoice' => $this,
             'company_address' => $this->getCompanyAddress(),
@@ -524,10 +546,18 @@ class Invoice extends Model implements HasMedia
             'logo' => $logo ?? null,
             'labels' => $labels,
             'taxes' => $taxes,
-            'customer'=>$customer
+            'customer' => $customer,
+            'total'=>$totalValue,
+            'stringTotal'=> $finalString,
+            'vatTextVal'=> $number.'قسيمة اتعاب  التخليص الجمركى  رقم ',
+            'vatInt'=>$intpart,
+            'vatFraction'=>$frac,
+            'vatWithout'=>$vatWithout,
+            'vatVat'=>$vatVat,
+            'vatString'=>$vatFinalString
         ]);
 
-        return PDF::loadView('app.pdf.invoice.'.$invoiceTemplate);
+        return PDF::loadView('app.pdf.invoice.' . $invoiceTemplate);
     }
 
     public function getEmailAttachmentSetting()
@@ -584,7 +614,14 @@ class Invoice extends Model implements HasMedia
             '{INVOICE_DUE_DATE}' => $this->formattedDueDate,
             '{INVOICE_NUMBER}' => $this->invoice_number,
             '{INVOICE_REF_NUMBER}' => $this->reference_number,
-            '{INVOICE_LINK}' => url('/customer/invoices/pdf/'.$this->unique_hash),
+            '{POLICY_DATA}' => $this->policyData,
+            '{INCLUDED_DATA}' => $this->included,
+            '{IMPORTED_FROM_DATA}' => $this->importedFrom,
+            '{VALIDATION_NUMBER_DATA}' => $this->validationNumber,
+            '{IMPORTS_DEC_DATA}' => $this->importsDesc,
+            '{VAT_DATA}' => $this->vat,
+            '{CLIENT_NAME_DATA}' => $this->clientName,
+            '{INVOICE_LINK}' => url('/customer/invoices/pdf/' . $this->unique_hash),
         ];
     }
 }

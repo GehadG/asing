@@ -67,7 +67,8 @@
           class="grid grid-cols-1 col-span-7 gap-4 mt-8 lg:gap-6 lg:mt-0 lg:grid-cols-2"
         >
           <sw-input-group
-            :label="$t('invoices.invoice_date')"
+            dir="rtl"
+            label="الإسكندرية في "
             :error="invoiceDateError"
             required
           >
@@ -81,7 +82,8 @@
           </sw-input-group>
 
           <sw-input-group
-            :label="$t('invoices.due_date')"
+            dir="rtl"
+            label="تاريخ الاستحقاق"
             :error="dueDateError"
             required
           >
@@ -96,7 +98,8 @@
           </sw-input-group>
 
           <sw-input-group
-            :label="$t('invoices.invoice_number')"
+            dir="rtl"
+            label=" رقم الايصال"
             :error="invoiceNumError"
             class="lg:mt-0"
             required
@@ -113,7 +116,8 @@
           </sw-input-group>
 
           <sw-input-group
-            :label="$t('invoices.ref_number')"
+            dir="rtl"
+            label="ملف رقم"
             :error="referenceError"
             class="lg:mt-0"
           >
@@ -122,6 +126,91 @@
               :invalid="$v.newInvoice.reference_number.$error"
               class="mt-2"
               @input="$v.newInvoice.reference_number.$touch()"
+            >
+              <hashtag-icon slot="leftIcon" class="h-4 ml-1 text-gray-500"/>
+            </sw-input>
+          </sw-input-group>
+          <sw-input-group
+            dir="rtl"
+            label="البوليصة"
+            :error="policyError"
+            class="lg:mt-0"
+            required
+          >
+            <sw-input
+              v-model="newInvoice.policyData"
+              class="mt-2"
+              @input="$v.newInvoice.policyData.$touch()"
+            >
+              <hashtag-icon slot="leftIcon" class="h-4 ml-1 text-gray-500"/>
+            </sw-input>
+          </sw-input-group>
+          <sw-input-group
+            dir="rtl"
+            label="المشمول"
+            :error="includedError"
+            class="lg:mt-0"
+          >
+            <sw-input
+              v-model="newInvoice.included"
+              class="mt-2"
+              @input="$v.newInvoice.included.$touch()"
+            >
+              <hashtag-icon slot="leftIcon" class="h-4 ml-1 text-gray-500"/>
+            </sw-input>
+          </sw-input-group>
+          <sw-input-group
+            dir="rtl"
+            label="وارد  من "
+            :error="importedFromError"
+            class="lg:mt-0"
+          >
+            <sw-input
+              v-model="newInvoice.importedFrom"
+              class="mt-2"
+              @input="$v.newInvoice.importedFrom.$touch()"
+            >
+              <hashtag-icon slot="leftIcon" class="h-4 ml-1 text-gray-500"/>
+            </sw-input>
+          </sw-input-group>
+          <sw-input-group
+            dir="rtl"
+            label="اعتماد رقم"
+            class="lg:mt-0"
+          >
+            <sw-input
+              v-model="newInvoice.validationNumber"
+              class="mt-2"
+              @input="$v.newInvoice.validationNumber.$touch()"
+            >
+              <hashtag-icon slot="leftIcon" class="h-4 ml-1 text-gray-500"/>
+            </sw-input>
+          </sw-input-group>
+          <sw-input-group
+            dir="rtl"
+            label="الوارد "
+            class="lg:mt-0"
+          >
+            <sw-input
+              v-model="newInvoice.importsDesc"
+
+              class="mt-2"
+              @input="$v.newInvoice.importsDesc.$touch()"
+            >
+              <hashtag-icon slot="leftIcon" class="h-4 ml-1 text-gray-500"/>
+            </sw-input>
+          </sw-input-group>
+          <sw-input-group
+            dir="rtl"
+            label="اتعاب  التخليص الجمركى "
+            class="lg:mt-0"
+            required
+          >
+            <sw-input
+              v-model="newInvoice.vat"
+
+              class="mt-2"
+              @input="$v.newInvoice.vat.$touch()"
             >
               <hashtag-icon slot="leftIcon" class="h-4 ml-1 text-gray-500"/>
             </sw-input>
@@ -407,6 +496,7 @@ import Tax from './InvoiceTax'
 import {PlusSmIcon} from '@vue-hero-icons/outline'
 import {ChevronDownIcon, HashtagIcon, PencilIcon, ShoppingCartIcon,} from '@vue-hero-icons/solid'
 import CustomFieldsMixin from '../../mixins/customFields'
+import decimal from "vuelidate";
 
 const {
   required,
@@ -432,11 +522,17 @@ export default {
   data() {
     return {
       newInvoice: {
+        policyData:null,
+        vat:0.0,
+        included:null,
+        importedFrom:null,
+        validationNumber:null,
+        importsDesc:null,
         invoice_date: null,
         due_date: null,
         invoice_number: null,
         user_id: null,
-        invoice_template_id: 1,
+        invoice_template_id: 3,
         sub_total: null,
         total: null,
         tax: null,
@@ -477,6 +573,10 @@ export default {
   validations() {
     return {
       newInvoice: {
+
+        vat:{
+          required
+        },
         invoice_date: {
           required,
         },
@@ -489,6 +589,18 @@ export default {
         reference_number: {
           maxLength: maxLength(255),
         },
+        policyData: {
+          required,
+          maxLength: maxLength(255),
+        },importsDesc: {
+          maxLength: maxLength(255),
+        },importedFrom: {
+          maxLength: maxLength(255),
+        },validationNumber: {
+          maxLength: maxLength(255),
+        },included: {
+          maxLength: maxLength(255),
+        }
       },
       selectedCustomer: {
         required,
@@ -664,6 +776,34 @@ export default {
         return this.$tc('validation.ref_number_maxlength')
       }
     },
+    policyError() {
+
+
+      if (!this.$v.newInvoice.policyData.maxLength) {
+        return this.$tc('validation.ref_number_maxlength')
+      }
+    },
+    includedError() {
+
+
+      if (!this.$v.newInvoice.included.maxLength) {
+        return this.$tc('validation.ref_number_maxlength')
+      }
+    },
+    importsDescError() {
+
+
+      if (!this.$v.newInvoice.importsDesc.maxLength) {
+        return this.$tc('validation.ref_number_maxlength')
+      }
+    },
+    importedFromError() {
+
+
+      if (!this.$v.newInvoice.importedFrom.maxLength) {
+        return this.$tc('validation.ref_number_maxlength')
+      }
+    }
   },
 
   watch: {
@@ -883,8 +1023,9 @@ export default {
     async submitForm() {
       // return
       let validate = await this.touchCustomField()
-
+      console.log("VALIDE : "+validate.error)
       if (!this.checkValid() || validate.error) {
+        console.log("inavlid")
         return false
       }
 
@@ -903,7 +1044,9 @@ export default {
       }
 
       if (this.selectedCustomer != null) {
+        console.log(this.selectedCustomer)
         data.user_id = this.selectedCustomer.id
+        data.clientName=this.selectedCustomer.name
       }
 
       if (this.$route.name === 'invoices.edit') {
@@ -1002,18 +1145,25 @@ export default {
       window.hub.$emit('checkItems')
       let isValid = true
       this.newInvoice.items.forEach((item) => {
+        console.log(item.valid)
         if (!item.valid) {
           isValid = false
         }
       })
+      console.log("Selected customer : "+ !this.$v.selectedCustomer.$invalid)
+      console.log("Invoice Num : "+   !this.$v.invoiceNumAttribute.$invalid)
+      console.log("New Invoice "+     this.$v.newInvoice.$invalid)
+      console.log("isValid : "+  isValid)
       if (
         !this.$v.selectedCustomer.$invalid &&
         !this.$v.invoiceNumAttribute.$invalid &&
         this.$v.newInvoice.$invalid === false &&
         isValid === true
       ) {
+        console.log("Final is True")
         return true
       }
+      console.log("Final is False")
       return false
     },
     onSelectNote(data) {

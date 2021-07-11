@@ -23,33 +23,17 @@
       <!-- Tabs -->
       <sw-tabs>
         <sw-tab-item
-          :title="$t('reports.sales.sales')"
+
           route="/admin/reports/sales"
+          title="تقرير المعاملات"
         >
         </sw-tab-item>
 
-        <sw-tab-item
-          :title="$t('reports.profit_loss.profit_loss')"
-          route="/admin/reports/profit-loss"
-        >
-        </sw-tab-item>
-
-        <sw-tab-item
-          :title="$t('reports.expenses.expenses')"
-          route="/admin/reports/expenses"
-        >
-        </sw-tab-item>
-
-        <sw-tab-item
-          :title="$t('reports.taxes.taxes')"
-          route="/admin/reports/taxes"
-        >
-        </sw-tab-item>
       </sw-tabs>
     </div>
     <transition name="fade" mode="out-in">
       <div
-        v-if="activeTab === 'SALES' || 'PROFIT_LOSS' || 'EXPENSES' || 'TAXES'"
+        v-if="activeTab === 'SALES'"
       >
         <router-view ref="report" />
       </div>

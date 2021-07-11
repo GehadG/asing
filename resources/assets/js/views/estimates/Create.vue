@@ -886,6 +886,7 @@ export default {
 
     async submitForm() {
       let validate = await this.touchCustomField()
+
       if (!this.checkValid() || validate.error) {
         return false
       }

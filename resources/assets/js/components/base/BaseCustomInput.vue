@@ -13,7 +13,7 @@
           type="button"
           class="mr-2"
         >
-          <plus-sm-icon class="h-5 mr-1 -ml-2" />
+          <plus-sm-icon class="h-5 mr-1 -ml-2"/>
           {{ $t('settings.customization.addresses.insert_fields') }}
         </sw-button>
         <div class="flex p-2">
@@ -28,7 +28,8 @@
               @click="insertField(field.value)"
             >
               <div class="flex">
-                <chevron-double-right-icon class="h-3 mt-1 text-gray-400" />{{
+                <chevron-double-right-icon class="h-3 mt-1 text-gray-400"/>
+                {{
                   field.label
                 }}
               </div>
@@ -54,9 +55,9 @@
 </template>
 
 <script>
-import { PlusSmIcon } from '@vue-hero-icons/outline'
-import { ChevronDoubleRightIcon } from '@vue-hero-icons/solid'
-import { mapActions, mapGetters } from 'vuex'
+import {PlusSmIcon} from '@vue-hero-icons/outline'
+import {ChevronDoubleRightIcon} from '@vue-hero-icons/solid'
+import {mapActions, mapGetters} from 'vuex'
 import customFields from '../../mixins/customFields'
 
 export default {
@@ -142,7 +143,7 @@ export default {
   },
   async mounted() {
     this.getFields()
-    await this.fetchNoteCustomFields({ limit: 'all' })
+    await this.fetchNoteCustomFields({limit: 'all'})
   },
   methods: {
     ...mapActions('customFields', ['fetchNoteCustomFields']),
@@ -155,14 +156,14 @@ export default {
           this.fieldList.push({
             label: 'Shipping Address',
             fields: [
-              { label: 'Address name', value: 'SHIPPING_ADDRESS_NAME' },
-              { label: 'Country', value: 'SHIPPING_COUNTRY' },
-              { label: 'State', value: 'SHIPPING_STATE' },
-              { label: 'City', value: 'SHIPPING_CITY' },
-              { label: 'Address Street 1', value: 'SHIPPING_ADDRESS_STREET_1' },
-              { label: 'Address Street 2', value: 'SHIPPING_ADDRESS_STREET_2' },
-              { label: 'Phone', value: 'SHIPPING_PHONE' },
-              { label: 'Zip Code', value: 'SHIPPING_ZIP_CODE' },
+              {label: 'Address name', value: 'SHIPPING_ADDRESS_NAME'},
+              {label: 'Country', value: 'SHIPPING_COUNTRY'},
+              {label: 'State', value: 'SHIPPING_STATE'},
+              {label: 'City', value: 'SHIPPING_CITY'},
+              {label: 'Address Street 1', value: 'SHIPPING_ADDRESS_STREET_1'},
+              {label: 'Address Street 2', value: 'SHIPPING_ADDRESS_STREET_2'},
+              {label: 'Phone', value: 'SHIPPING_PHONE'},
+              {label: 'Zip Code', value: 'SHIPPING_ZIP_CODE'},
             ],
           })
         }
@@ -171,14 +172,14 @@ export default {
           this.fieldList.push({
             label: 'Billing Address',
             fields: [
-              { label: 'Address name', value: 'BILLING_ADDRESS_NAME' },
-              { label: 'Country', value: 'BILLING_COUNTRY' },
-              { label: 'State', value: 'BILLING_STATE' },
-              { label: 'City', value: 'BILLING_CITY' },
-              { label: 'Address Street 1', value: 'BILLING_ADDRESS_STREET_1' },
-              { label: 'Address Street 2', value: 'BILLING_ADDRESS_STREET_2' },
-              { label: 'Phone', value: 'BILLING_PHONE' },
-              { label: 'Zip Code', value: 'BILLING_ZIP_CODE' },
+              {label: 'Address name', value: 'BILLING_ADDRESS_NAME'},
+              {label: 'Country', value: 'BILLING_COUNTRY'},
+              {label: 'State', value: 'BILLING_STATE'},
+              {label: 'City', value: 'BILLING_CITY'},
+              {label: 'Address Street 1', value: 'BILLING_ADDRESS_STREET_1'},
+              {label: 'Address Street 2', value: 'BILLING_ADDRESS_STREET_2'},
+              {label: 'Phone', value: 'BILLING_PHONE'},
+              {label: 'Zip Code', value: 'BILLING_ZIP_CODE'},
             ],
           })
         }
@@ -187,11 +188,11 @@ export default {
           this.fieldList.push({
             label: 'Customer',
             fields: [
-              { label: 'Display Name', value: 'CONTACT_DISPLAY_NAME' },
-              { label: 'Contact Name', value: 'PRIMARY_CONTACT_NAME' },
-              { label: 'Email', value: 'CONTACT_EMAIL' },
-              { label: 'Phone', value: 'CONTACT_PHONE' },
-              { label: 'Website', value: 'CONTACT_WEBSITE' },
+              {label: 'Display Name', value: 'CONTACT_DISPLAY_NAME'},
+              {label: 'Contact Name', value: 'PRIMARY_CONTACT_NAME'},
+              {label: 'Email', value: 'CONTACT_EMAIL'},
+              {label: 'Phone', value: 'CONTACT_PHONE'},
+              {label: 'Website', value: 'CONTACT_WEBSITE'},
               ...this.customerFields.map((i) => ({
                 label: i.label,
                 value: i.slug,
@@ -204,11 +205,17 @@ export default {
           this.fieldList.push({
             label: 'Invoice',
             fields: [
-              { label: 'Date', value: 'INVOICE_DATE' },
-              { label: 'Due Date', value: 'INVOICE_DUE_DATE' },
-              { label: 'Number', value: 'INVOICE_NUMBER' },
-              { label: 'Ref Number', value: 'INVOICE_REF_NUMBER' },
-              { label: 'Invoice Link', value: 'INVOICE_LINK' },
+              {label: 'Date', value: 'INVOICE_DATE'},
+              {label: 'Due Date', value: 'INVOICE_DUE_DATE'},
+              {label: 'Number', value: 'INVOICE_NUMBER'},
+              {label: 'ملف رقم', value: 'INVOICE_REF_NUMBER'},
+              {label: 'البوليصة', value: 'POLICY_DATA'},
+              {label: 'المشمول', value: 'INCLUDED_DATA'},
+              {label: 'وارد  من', value: 'IMPORTED_FROM_DATA'},
+              {label: 'اعتماد رقم', value: 'VALIDATION_NUMBER_DATA'},
+              {label: 'الوارد', value: 'IMPORTS_DEC_DATA'},
+              {label: 'اتعاب  التخليص الجمركى', value: 'VAT_DATA'},
+              {label: 'Invoice Link', value: 'INVOICE_LINK'},
               ...this.invoiceFields.map((i) => ({
                 label: i.label,
                 value: i.slug,
@@ -221,11 +228,11 @@ export default {
           this.fieldList.push({
             label: 'Estimate',
             fields: [
-              { label: 'Date', value: 'ESTIMATE_DATE' },
-              { label: 'Expiry Date', value: 'ESTIMATE_EXPIRY_DATE' },
-              { label: 'Number', value: 'ESTIMATE_NUMBER' },
-              { label: 'Ref Number', value: 'ESTIMATE_REF_NUMBER' },
-              { label: 'Estimate Link', value: 'ESTIMATE_LINK' },
+              {label: 'Date', value: 'ESTIMATE_DATE'},
+              {label: 'Expiry Date', value: 'ESTIMATE_EXPIRY_DATE'},
+              {label: 'Number', value: 'ESTIMATE_NUMBER'},
+              {label: 'Ref Number', value: 'ESTIMATE_REF_NUMBER'},
+              {label: 'Estimate Link', value: 'ESTIMATE_LINK'},
               ...this.estimateFields.map((i) => ({
                 label: i.label,
                 value: i.slug,
@@ -238,11 +245,11 @@ export default {
           this.fieldList.push({
             label: 'Payment',
             fields: [
-              { label: 'Date', value: 'PAYMENT_DATE' },
-              { label: 'Number', value: 'PAYMENT_NUMBER' },
-              { label: 'Mode', value: 'PAYMENT_MODE' },
-              { label: 'Amount', value: 'PAYMENT_AMOUNT' },
-              { label: 'Payment Link', value: 'PAYMENT_LINK' },
+              {label: 'Date', value: 'PAYMENT_DATE'},
+              {label: 'Number', value: 'PAYMENT_NUMBER'},
+              {label: 'Mode', value: 'PAYMENT_MODE'},
+              {label: 'Amount', value: 'PAYMENT_AMOUNT'},
+              {label: 'Payment Link', value: 'PAYMENT_LINK'},
               ...this.paymentFields.map((i) => ({
                 label: i.label,
                 value: i.slug,
@@ -255,14 +262,14 @@ export default {
           this.fieldList.push({
             label: 'Company',
             fields: [
-              { label: 'Company Name', value: 'COMPANY_NAME' },
-              { label: 'Country', value: 'COMPANY_COUNTRY' },
-              { label: 'State', value: 'COMPANY_STATE' },
-              { label: 'City', value: 'COMPANY_CITY' },
-              { label: 'Address Street 1', value: 'COMPANY_ADDRESS_STREET_1' },
-              { label: 'Address Street 2', value: 'COMPANY_ADDRESS_STREET_2' },
-              { label: 'Phone', value: 'COMPANY_PHONE' },
-              { label: 'Zip Code', value: 'COMPANY_ZIP_CODE' },
+              {label: 'Company Name', value: 'COMPANY_NAME'},
+              {label: 'Country', value: 'COMPANY_COUNTRY'},
+              {label: 'State', value: 'COMPANY_STATE'},
+              {label: 'City', value: 'COMPANY_CITY'},
+              {label: 'Address Street 1', value: 'COMPANY_ADDRESS_STREET_1'},
+              {label: 'Address Street 2', value: 'COMPANY_ADDRESS_STREET_2'},
+              {label: 'Phone', value: 'COMPANY_PHONE'},
+              {label: 'Zip Code', value: 'COMPANY_ZIP_CODE'},
             ],
           })
         }

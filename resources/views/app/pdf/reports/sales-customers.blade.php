@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>@lang('pdf_sales_customers_label')</title>
+    <title>تقرير المعاملات</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style type="text/css">
         body {
-            font-family: "DejaVu Sans";
+            font-family: Amiri,"DejaVu Sans";
         }
-        
+
         table {
             border-collapse: collapse;
         }
@@ -73,6 +77,14 @@
             line-height: 21px;
             color: #595959;
         }
+        .sales-information-text2 {
+            padding: 0px;
+            margin: 0px;
+            font-size: 16px;
+            line-height: 21px;
+            color: #111827;
+            font-weight: bold;
+        }
 
         .sales-amount {
             padding: 0px;
@@ -135,70 +147,134 @@
         .text-center {
             text-align: center;
         }
+        td{
+            text-align: center; !important;
+        }
     </style>
 </head>
 <body>
-    <div class="sub-container">
-        <table class="report-header">
-            <tr>
-                <td>
-                    <p class="heading-text">{{ $company->name }}</p>
-                </td>
-                <td>
-                    <p class="heading-date-range">{{ $from_date }} - {{ $to_date }}</p>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <p class="sub-heading-text text-center">@lang('pdf_customer_sales_report')</p>
-                </td>
-            </tr>
-        </table>
-
-        @foreach ($customers as $customer)
-            <p class="sales-customer-name">{{ $customer->name }}</p>
-            <div class="sales-table-container">
-                <table class="sales-table">
-                    @foreach ($customer->invoices as $invoice)
-                        <tr>
-                            <td>
-                                <p class="sales-information-text">
-                                    {{ $invoice->formattedInvoiceDate }} ({{ $invoice->invoice_number }})
-                                </p>
-                            </td>
-                            <td>
-                                <p class="sales-amount">
-                                    {!! format_money_pdf($invoice->total) !!}
-                                </p>
-                            </td>
-                        </tr>
-                    @endforeach
-                </table>
-            </div>
-            <table class="sales-total-indicator-table">
-                <tr>
-                    <td class="sales-total-cell">
-                        <p class="sales-total-amount">
-                            {!! format_money_pdf($customer->totalAmount) !!}
-                        </p>
-                    </td>
-                </tr>
-            </table>
-        @endforeach
-    </div>
-
-
-    <table class="report-footer">
+<div class="sub-container">
+    <table class="report-header">
         <tr>
             <td>
-                <p class="report-footer-label">@lang('pdf_total_sales_label')</p>
+                <p class="heading-text">{{ $company->name }}</p>
             </td>
             <td>
-                <p class="report-footer-value">
-                    {!! format_money_pdf($totalAmount) !!}
-                </p>
+                <p class="heading-date-range">{{ $from_date }} - {{ $to_date }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <p class="sub-heading-text text-center">تقرير المعاملات</p>
             </td>
         </tr>
     </table>
+
+
+    <div class="sales-table-container">
+        <table class="sales-table" border="1">
+            <tr>
+                <th>رقم الفاتورة</th>
+                <th>اسم العميل</th>
+                <th>المجموع</th>
+                <th>القيمة المضافة</th>
+                <th>اتعاب</th>
+                <th>التاريخ</th>
+            </tr>
+            @foreach ($invoices as $invoice)
+            @php
+            $vatWith = $invoice->vat / 1.1;
+            $vatOnly = $invoice->vat - $vatWith;
+            if($type==='1'){
+            $datex = $invoice->formattedInvoiceDate;
+            }else{
+            $datex = $invoice->formattedDueDate;
+            }
+            @endphp
+            <tr>
+                <td>
+                    <p class="sales-information-text">
+                        ({{ $invoice->invoice_number }})
+                    </p>
+                </td>
+                <td>
+                    <p class="sales-information-text">
+                        {{ $invoice->clientName }}
+                    </p>
+                </td>
+                <td>
+                    <p class="sales-information-text">
+                        {!! format_money_pdf($invoice->vat, $invoice->user->currency) !!}
+
+                    </p>
+                </td>
+                <td>
+                    <p class="sales-information-text">
+                        {!! format_money_pdf($vatOnly, $invoice->user->currency) !!}
+
+                    </p>
+                </td>
+                <td>
+                    <p class="sales-information-text">
+                        {!! format_money_pdf($vatWith, $invoice->user->currency) !!}
+                    </p>
+                </td>
+                <td>
+                    <p class="sales-information-text">
+                        {{$datex}}
+                    </p>
+                </td>
+            </tr>
+            @endforeach
+            <tr>
+                <td>
+                    <p class="sales-information-text">
+                        &nbsp;
+                    </p>
+                </td>
+                <td>
+                    <p class="sales-information-text">
+                        &nbsp;
+                    </p>
+                </td>
+                <td>
+                    <p class="sales-information-text2">
+                        {!! format_money_pdf($totalInTotal, $invoice->user->currency) !!}
+
+                    </p>
+                </td>
+                <td>
+                    <p class="sales-information-text2">
+                        {!! format_money_pdf($totalVat, $invoice->user->currency) !!}
+
+                    </p>
+                </td>
+                <td>
+                    <p class="sales-information-text2">
+                        {!! format_money_pdf($totalFees, $invoice->user->currency) !!}
+                    </p>
+                </td>
+                <td>
+                    <p class="sales-information-text">
+                       &nbsp;
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<table class="report-footer">
+    <tr>
+
+        <td>
+            <p class="report-footer-value">
+                {!! format_money_pdf($totalInTotal) !!}
+            </p>
+        </td>
+        <td>
+            <p class="report-footer-label">المجموع</p>
+        </td>
+    </tr>
+</table>
 </body>
 </html>
