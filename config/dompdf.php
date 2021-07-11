@@ -56,8 +56,9 @@ return [
          * The directory specified must be writeable by the webserver process.
          * The temporary directory is required to download remote images and when
          * using the PFDLib back end.
+         *  "temp_dir" => storage_path('temp/'),
          */
-        "temp_dir" => storage_path('temp/'),
+
 
         /**
          * ==== IMPORTANT ====
