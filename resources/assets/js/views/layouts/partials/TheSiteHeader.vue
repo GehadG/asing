@@ -8,14 +8,14 @@
     >
       <img
         id="logo-white"
-        src="/assets/img/logo-white.png"
-        alt="Crater Logo"
+        src="/assets/img/asint_white.png"
+        alt="AirandSeaLogo"
         class="hidden h-6 md:block"
       />
       <img
         id="logo-mobile"
         src="/assets/img/crater-white-small.png"
-        alt="Crater Logo"
+        alt="AirandSeaLogo"
         class="block h-8 md:hidden"
       />
     </a>

@@ -26,10 +26,10 @@ services:
       # and uncomment the line under this one.
       #- ./docker-compose/db/data:/var/lib/mysql:rw,delegated
     environment:
-      MYSQL_USER: crater
-      MYSQL_PASSWORD: crater
-      MYSQL_DATABASE: crater
-      MYSQL_ROOT_PASSWORD: crater
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: sFraYSaZEJ1PfBgQq7P1
+      MYSQL_DATABASE: asint
+      MYSQL_ROOT_PASSWORD: sFraYSaZEJ1PfBgQq7P1
     ports:
       - '33006:3306'
     networks:

@@ -104,8 +104,8 @@ export default {
 
   data() {
     return {
-      reportTypes: ['By Customer', 'By Item'],
-      selectedType: 'By Customer',
+      reportTypes: ['تاريخ كشف الحساب', 'تاريخ الاستحقاق'],
+      selectedType: 'تاريخ كشف الحساب',
       dateRange: [
         'Today',
         'This Week',
@@ -280,7 +280,7 @@ export default {
     },
 
     async getInitialReport() {
-      if (this.selectedType === 'By Customer') {
+      if (this.selectedType === 'تاريخ كشف الحساب') {
         this.url = this.customerDateRangeUrl
         return true
       }
@@ -300,7 +300,7 @@ export default {
       if (this.$v.$invalid) {
         return true
       }
-      if (this.selectedType === 'By Customer') {
+      if (this.selectedType === 'تاريخ كشف الحساب') {
         this.url = this.customerDateRangeUrl
         return true
       }
@@ -315,7 +315,7 @@ export default {
 
       window.open(this.getReportUrl + '&download=true')
       setTimeout(() => {
-        if (this.selectedType === 'By Customer') {
+        if (this.selectedType === 'تاريخ كشف الحساب') {
           this.url = this.customerDateRangeUrl
           return true
         }

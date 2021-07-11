@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Crater\Http\Controllers\Controller;
 use Crater\Models\Company;
 use Crater\Models\CompanySetting;
+use Crater\Models\Invoice;
 use Crater\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -41,7 +42,8 @@ class CustomerSalesReportController extends Controller
             ->whereCompany($company->id)
             ->applyInvoiceFilters($request->only(['from_date', 'to_date']))
             ->get();
-
+        $invoices = Invoice::whereBetween('invoice_date',
+            [$start->format('Y-m-d'), $end->format('Y-m-d')])->orderBy('invoice_date','DESC')->get();
         $totalAmount = 0;
         foreach ($customers as $customer) {
             $customerTotalAmount = 0;
@@ -50,6 +52,16 @@ class CustomerSalesReportController extends Controller
             }
             $customer->totalAmount = $customerTotalAmount;
             $totalAmount += $customerTotalAmount;
+        }
+        $totalVat =0;
+        $totalFees=0;
+        $totalInTotal=0;
+        foreach ($invoices as $inv){
+            $vatWith = $inv->vat / 1.1;
+            $vatOnly = $inv->vat - $vatWith;
+            $totalVat+=$vatOnly;
+            $totalFees+=$vatWith;
+            $totalInTotal+=$inv->vat;
         }
 
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
@@ -79,6 +91,11 @@ class CustomerSalesReportController extends Controller
             'company' => $company,
             'from_date' => $from_date,
             'to_date' => $to_date,
+            'totalFees'=>$totalFees,
+            'totalVat'=>$totalVat,
+            'totalInTotal'=>$totalInTotal,
+            'invoices'=>$invoices,
+            'type'=>'1'
         ]);
 
         $pdf = PDF::loadView('app.pdf.reports.sales-customers');

@@ -7,6 +7,8 @@
  * @author   Taylor Otwell <taylor@laravel.com>
  */
 
+use FontLib\Font;
+
 define('LARAVEL_START', microtime(true));
 
 if (file_exists(__DIR__.'/../storage/framework/maintenance.php')) {
